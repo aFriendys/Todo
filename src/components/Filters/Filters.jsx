@@ -4,7 +4,15 @@ import './Filters.css';
 function Filters({ changeFilter }) {
   return (
     <div className="filters">
-      <input type="radio" name="filter" onChange={changeFilter} id="filter_all" className="filter-checkbox" />
+      <input
+        type="radio"
+        name="filter"
+        onChange={changeFilter}
+        id="filter_all"
+        className="filter-checkbox"
+        // eslint-disable-next-line react/no-unknown-property
+        defaultChecked
+      />
       <label htmlFor="filter_all" className="filter-label">
         All
       </label>

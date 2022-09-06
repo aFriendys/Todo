@@ -37,14 +37,7 @@ function TodoListItem({
   return (
     <li className={classNames}>
       <div className="view">
-        <input
-          className="toggle"
-          type="checkbox"
-          onClick={onToggleDone}
-          id={`todo-${creationTime}`}
-          // eslint-disable-next-line react/no-unknown-property
-          defaultChecked={isCompleted}
-        />
+        <input className="toggle" type="checkbox" onClick={onToggleDone} id={`todo-${creationTime}`} />
         <label htmlFor={`todo-${creationTime}`}>
           <span className="description">{label}</span>
           <span className="created">created {dateDistance} ago</span>
