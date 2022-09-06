@@ -23,9 +23,9 @@ class App extends Component {
     super(props);
     this.state = {
       todoItems: [
-        App.createTodoItem('Completed task', '1661357995014', false, false),
-        App.createTodoItem('Editing task', '1661357995614', false, false),
-        App.createTodoItem('Active task', '1661358014766', false, false),
+        App.createTodoItem('Task 1', '1661357995014', true, false),
+        App.createTodoItem('Task 2', '1661357995614', false, false),
+        App.createTodoItem('Task 3', '1661358014766', false, false),
       ],
       filter: 'all',
     };
