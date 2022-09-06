@@ -1,0 +1,33 @@
+.filters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  right: 0;
+  left: 0;
+}
+
+.filter-label {
+  cursor: pointer;
+  display: inline;
+  color: inherit;
+  margin: 3px;
+  padding: 3px 7px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: border 0.3s ease;
+}
+
+.filter-checkbox {
+  display: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.filter-label:hover {
+  border-color: rgba(175, 47, 47, 0.1);
+}
+
+.filter-checkbox:checked + .filter-label {
+  border-color: rgba(175, 47, 47, 0.2);
+}
