@@ -174,3 +174,8 @@
 .toggle-all:checked + label:before {
   color: #737373;
 }
+
+.todo-list li label{
+  user-select: none;
+  cursor: pointer;
+}
