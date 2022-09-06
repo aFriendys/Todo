@@ -37,8 +37,8 @@ function TodoListItem({
   return (
     <li className={classNames}>
       <div className="view">
-        <input className="toggle" type="checkbox" onClick={onToggleDone} />
-        <label>
+        <input className="toggle" type="checkbox" onClick={onToggleDone} id={`todo-${creationTime}`} />
+        <label htmlFor={`todo-${creationTime}`}>
           <span className="description">{label}</span>
           <span className="created">created {dateDistance} ago</span>
         </label>
