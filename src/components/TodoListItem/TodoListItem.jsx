@@ -42,8 +42,6 @@ function TodoListItem({
           type="checkbox"
           onClick={onToggleDone}
           id={`todo-${creationTime}`}
-          // eslint-disable-next-line react/no-unknown-property
-          defaultChecked={isCompleted}
         />
         <label htmlFor={`todo-${creationTime}`}>
           <span className="description">{label}</span>
