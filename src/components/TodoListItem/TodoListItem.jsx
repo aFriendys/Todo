@@ -48,9 +48,10 @@ function TodoListItem({
         <label htmlFor={`todo-${creationTime}`}>
           <span className="title">{label}</span>
           <span className="description">
-            <button className="icon icon-play"></button>
-            <button class="icon icon-pause"></button>
-                  12:25</span>
+            <button type="button" className="icon icon-play" />
+            <button type="button" className="icon icon-pause" />
+            12:25
+          </span>
           <span className="created">created {dateDistance} ago</span>
         </label>
         <button type="button" className="icon icon-edit" onClick={editTodo} />

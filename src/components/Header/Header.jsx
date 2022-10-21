@@ -31,18 +31,10 @@ export default class Header extends Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        {/* <form onSubmit={this.onSubmit}>
-          <input
-            onChange={this.onInputChange}
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={label}
-          />
-        </form> */}
-        <form class="new-todo-form">
-          <input class="new-todo" placeholder="Task" autofocus />
-          <input class="new-todo-form__timer" placeholder="Min" autofocus />
-          <input class="new-todo-form__timer" placeholder="Sec" autofocus />
+        <form className="new-todo-form" onSubmit={this.onSubmit}>
+          <input className="new-todo" placeholder="Task" onChange={this.onInputChange} value={label} />
+          <input className="new-todo-form__timer" placeholder="Min" />
+          <input className="new-todo-form__timer" placeholder="Sec" />
         </form>
       </header>
     );
