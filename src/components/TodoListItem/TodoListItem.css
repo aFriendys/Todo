@@ -1,4 +1,16 @@
-.todo-list li.completed label .description {
+
+.todo-list li label {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.todo-list li label .created {
+  color: gray;
+  font-size: 13px;
+}
+
+.todo-list li.completed label .title {
   color: #cdcdcd;
   text-decoration: line-through;
 }
