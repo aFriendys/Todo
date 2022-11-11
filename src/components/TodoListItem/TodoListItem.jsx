@@ -1,5 +1,6 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import './TodoListItem.css';
+import { formatDistanceToNow } from 'date-fns';
 
 function TodoListItem({
   label,
@@ -7,35 +8,50 @@ function TodoListItem({
   onToggleDone,
   isEditing,
   isCompleted,
-  dateDistance,
   editTodo,
   creationTime,
   changeTodoLabel,
 }) {
-  let classNames = '';
-
+  const classNames = [];
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [isCounting, setIsCounting] = useState(false);
+  const [dateDistance, setDatedistance] = useState(`${formatDistanceToNow(new Date(Number(creationTime)))} ago`);
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft - minutes * 60;
   if (isCompleted) {
-    classNames += 'completed';
+    classNames.push('completed');
   }
-
   if (isEditing) {
-    classNames += 'editing';
+    classNames.push('editing');
   }
 
-  const editInput = (
-    <input
-      type="text"
-      className="edit"
-      defaultValue={label}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          changeTodoLabel(creationTime, e.target.value);
-        }
-      }}
-    />
-  );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDatedistance(formatDistanceToNow(new Date(Number(creationTime)), { addSuffix: true }));
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [dateDistance]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isCounting) {
+        setTimeLeft((timeleft) => timeleft + 1);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isCounting]);
+  const handleStart = () => {
+    setIsCounting(true);
+  };
+  const handleStop = () => {
+    setIsCounting(false);
+  };
   return (
-    <li className={classNames}>
+    <li className={classNames.join(' ')}>
       <div className="view">
         <input
           className="toggle"
@@ -48,16 +64,30 @@ function TodoListItem({
         <label htmlFor={`todo-${creationTime}`}>
           <span className="title">{label}</span>
           <span className="description">
-            <button type="button" className="icon icon-play" />
-            <button type="button" className="icon icon-pause" />
-            12:25
+            {isCounting ? (
+              <button type="button" className="icon icon-pause" onClick={handleStop} />
+            ) : (
+              <button type="button" className="icon icon-play" onClick={handleStart} />
+            )}
+            {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
           </span>
-          <span className="created">created {dateDistance} ago</span>
+          <span className="created">created in {dateDistance}</span>
         </label>
         <button type="button" className="icon icon-edit" onClick={editTodo} />
         <button type="button" className="icon icon-destroy" onClick={onDeleted} />
       </div>
-      {classNames === 'editing' ? editInput : false}
+      {isEditing && (
+        <input
+          type="text"
+          className="edit"
+          defaultValue={label}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              changeTodoLabel(creationTime, e.target.value);
+            }
+          }}
+        />
+      )}
     </li>
   );
 }

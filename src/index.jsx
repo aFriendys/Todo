@@ -1,155 +1,107 @@
-import React, { Component } from 'react';
+/* eslint-disable react/no-this-in-sfc */
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { formatDistance } from 'date-fns';
 
 import Header from './components/Header';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
 import './styles.css';
 
-class App extends Component {
-  static createTodoItem(label, creationTime, completed, editing) {
-    const dateDistance = formatDistance(new Date(), new Date(Number(creationTime)));
-    return {
-      label,
-      creationTime,
-      completed,
-      editing,
-      dateDistance: `in ${dateDistance}`,
-    };
-  }
+function App() {
+  const createTodoItem = (label, creationTime, completed, editing) => ({
+    label,
+    creationTime,
+    completed,
+    editing,
+  });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      todoItems: [
-        App.createTodoItem('Task 1', '1661357995014', true, false),
-        App.createTodoItem('Task 2', '1661357995614', false, false),
-        App.createTodoItem('Task 3', '1661358014766', false, false),
-      ],
-      filter: 'all',
-    };
-  }
+  const [todoItems, setTodoItems] = useState([
+    createTodoItem('Task 1', '1661357995014', true, false),
+    createTodoItem('Task 2', '1661357995614', true, false),
+    createTodoItem('Task 3', '1661358014766', false, false),
+  ]);
 
-  changeTodoLabel = (id, value) => {
-    this.setState(({ todoItems }) => {
-      const newArr = todoItems.map((elem) => {
+  const [filter, setFilter] = useState('all');
+
+  const changeTodoLabel = (id, value) => {
+    setTodoItems((items) =>
+      items.map((elem) => {
         const newElem = elem;
         if (newElem.creationTime === id) {
           newElem.editing = false;
           newElem.label = value;
         }
         return newElem;
-      });
-      return { todoItems: newArr };
-    });
+      })
+    );
+  };
+  const changeFilter = (e) => {
+    setFilter(() => e.target.id.replace('filter_', ''));
+  };
+  const addItem = (name) => {
+    setTodoItems(() => [...todoItems, createTodoItem(name, Number(new Date()), false, false)]);
+  };
+  const deleteItem = (id) => {
+    setTodoItems(() => todoItems.filter((elem) => elem.creationTime !== id));
   };
 
-  editTodo = (id) => {
-    this.setState(({ todoItems }) => {
-      const newArr = todoItems.map((elem) => {
+  const toogleCompleted = (id) => {
+    setTodoItems((items) =>
+      items.map((elem) => {
         const newElem = elem;
-        if (newElem.creationTime === id) {
+        if (elem.creationTime === id) newElem.completed = !newElem.completed;
+        return newElem;
+      })
+    );
+  };
+
+  const editTask = (id) => {
+    setTodoItems((items) =>
+      items.map((elem) => {
+        const newElem = elem;
+        if (elem.creationTime === id) {
           newElem.editing = true;
           newElem.completed = false;
         }
         return newElem;
-      });
-      return { todoItems: newArr };
-    });
-  };
-
-  changeFilter = (e) => {
-    this.setState(() => ({ filter: e.target.id.replace('filter_', '') }));
-  };
-
-  changeDateDistance = () => {
-    this.setState(() => {
-      const { todoItems } = this.state;
-      const newArr = todoItems.map((elem) => {
-        const newElem = elem;
-        const distance = formatDistance(new Date(), new Date(Number(newElem.creationTime)), { addSuffix: true });
-
-        newElem.dateDistance = distance;
-        return newElem;
-      });
-      return { todoItems: newArr };
-    });
-  };
-
-  addItem = (name) => {
-    this.setState(({ todoItems }) => {
-      const item = App.createTodoItem(name, Number(new Date()), false, false);
-      return {
-        todoItems: [...todoItems, item],
-      };
-    });
-  };
-
-  onDeleted = (id) => {
-    this.setState(({ todoItems }) => {
-      const newArr = todoItems.filter((elem) => elem.creationTime !== id);
-      return { todoItems: newArr };
-    });
-  };
-
-  onToggleDone = (id) => {
-    this.setState(({ todoItems }) => {
-      const newArr = todoItems.map((elem) => {
-        const newElem = elem;
-        if (newElem.creationTime === id) {
-          newElem.completed = !elem.completed;
-        }
-        return newElem;
-      });
-      return { todoItems: newArr };
-    });
-  };
-
-  clearCompleted = () => {
-    this.setState(({ todoItems }) => {
-      const newArr = todoItems.filter((elem) => !elem.completed);
-      return { todoItems: newArr };
-    });
-  };
-
-  render() {
-    const { todoItems, filter } = this.state;
-
-    setInterval(() => {
-      this.changeDateDistance();
-    }, 10000);
-
-    const remainingItems = todoItems.filter((elem) => !elem.completed).length;
-
-    let todoItemsShown;
-    switch (filter) {
-      case 'completed':
-        todoItemsShown = todoItems.filter((elem) => elem.completed);
-        break;
-      case 'active':
-        todoItemsShown = todoItems.filter((elem) => !elem.completed);
-        break;
-      default:
-        todoItemsShown = todoItems;
-    }
-
-    return (
-      <section className="todoapp">
-        <Header addItem={this.addItem} />
-        <section className="main">
-          <TodoList
-            todoItems={todoItemsShown}
-            onDeleted={this.onDeleted}
-            onToggleDone={this.onToggleDone}
-            editTodo={this.editTodo}
-            changeTodoLabel={this.changeTodoLabel}
-          />
-          <Footer changeFilter={this.changeFilter} onClickEvent={this.clearCompleted} remainingItems={remainingItems} />
-        </section>
-      </section>
+      })
     );
+  };
+
+  const clearCompletedTasks = () => {
+    setTodoItems(() => todoItems.filter((elem) => !elem.completed));
+  };
+
+  const remainingItems = todoItems.filter((elem) => !elem.completed).length;
+
+  let todoItemsShown;
+  switch (filter) {
+    case 'completed':
+      todoItemsShown = todoItems.filter((elem) => elem.completed);
+      break;
+    case 'active':
+      todoItemsShown = todoItems.filter((elem) => !elem.completed);
+      break;
+    default:
+      todoItemsShown = todoItems;
   }
+
+  return (
+    <section className="todoapp">
+      <Header addItem={addItem} />
+      <section className="main">
+        <TodoList
+          todoItems={todoItemsShown}
+          onDeleted={deleteItem}
+          onToggleDone={toogleCompleted}
+          editTodo={editTask}
+          changeTodoLabel={changeTodoLabel}
+        />
+        <Footer changeFilter={changeFilter} onClickEvent={clearCompletedTasks} remainingItems={remainingItems} />
+      </section>
+    </section>
+  );
 }
 
 const root = createRoot(document.getElementById('root'));

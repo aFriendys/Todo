@@ -1,42 +1,58 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './Header.css';
 
-export default class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { label: '' };
-  }
-
-  onInputChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    });
+function Header({ addItem }) {
+  const [newTodo, changeNewTodo] = useState({ label: '', minutes: '', seconds: '' });
+  const onLabelChange = (e) => {
+    changeNewTodo((v) => ({ ...v, label: e.target.value }));
   };
 
-  onSubmit = (e) => {
-    const { label } = this.state;
-    const { addItem } = this.props;
-    e.preventDefault();
+  const onMinutesChange = (e) => {
+    changeNewTodo((v) => ({ ...v, minutes: e.target.value }));
+  };
 
-    if (label.trim().length) {
-      addItem(label);
+  const onSecondsChange = (e) => {
+    changeNewTodo((v) => ({ ...v, seconds: e.target.value }));
+  };
+
+  const createNewTask = (e) => {
+    if (e.code !== 'Enter') {
+      return;
     }
-    this.setState({
-      label: '',
-    });
-  };
 
-  render() {
-    const { label } = this.state;
-    return (
-      <header className="header">
-        <h1>todos</h1>
-        <form className="new-todo-form" onSubmit={this.onSubmit}>
-          <input className="new-todo" placeholder="Task" onChange={this.onInputChange} value={label} />
-          <input className="new-todo-form__timer" placeholder="Min" />
-          <input className="new-todo-form__timer" placeholder="Sec" />
-        </form>
-      </header>
-    );
-  }
+    if (newTodo.label.trim().length && newTodo.minutes.trim().length && newTodo.seconds.trim().length) {
+      addItem(newTodo.label);
+      changeNewTodo(() => ({ label: '', minutes: '', seconds: '' }));
+    }
+  };
+  return (
+    <header className="header">
+      <h1>todos</h1>
+      <form className="new-todo-form">
+        <input
+          className="new-todo"
+          placeholder="Task"
+          value={newTodo.label}
+          onChange={onLabelChange}
+          onKeyDown={createNewTask}
+        />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Min"
+          value={newTodo.minutes}
+          onChange={onMinutesChange}
+          onKeyDown={createNewTask}
+        />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Sec"
+          value={newTodo.seconds}
+          onChange={onSecondsChange}
+          onKeyDown={createNewTask}
+        />
+      </form>
+    </header>
+  );
 }
+
+export default Header;
