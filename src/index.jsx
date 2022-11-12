@@ -16,7 +16,7 @@ function App() {
   });
 
   const [todoItems, setTodoItems] = useState([
-    createTodoItem('Task 1', '1661357995014', true, false, 10 * 60),
+    createTodoItem('Task 1', '1661357995014', true, false, 5 * 60),
     createTodoItem('Task 2', '1661357995614', true, false, 20 * 60),
     createTodoItem('Task 3', '1661358014766', false, false, 30 * 60),
   ]);
