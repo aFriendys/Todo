@@ -8,11 +8,11 @@ function Header({ addItem }) {
   };
 
   const onMinutesChange = (e) => {
-    changeNewTodo((v) => ({ ...v, minutes: e.target.value }));
+    changeNewTodo((v) => ({ ...v, minutes: e.target.value > 99 ? 99 : e.target.value }));
   };
 
   const onSecondsChange = (e) => {
-    changeNewTodo((v) => ({ ...v, seconds: e.target.value }));
+    changeNewTodo((v) => ({ ...v, seconds: e.target.value > 59 ? 59 : e.target.value }));
   };
 
   const createNewTask = (e) => {
@@ -20,8 +20,8 @@ function Header({ addItem }) {
       return;
     }
 
-    if (newTodo.label.trim().length && newTodo.minutes.trim().length && newTodo.seconds.trim().length) {
-      addItem(newTodo.label);
+    if (newTodo.label.trim().length) {
+      addItem(newTodo.label, Number(newTodo.minutes) * 60 + Number(newTodo.seconds));
       changeNewTodo(() => ({ label: '', minutes: '', seconds: '' }));
     }
   };
@@ -37,6 +37,9 @@ function Header({ addItem }) {
           onKeyDown={createNewTask}
         />
         <input
+          type="number"
+          min="0"
+          max="99"
           className="new-todo-form__timer"
           placeholder="Min"
           value={newTodo.minutes}
@@ -44,6 +47,9 @@ function Header({ addItem }) {
           onKeyDown={createNewTask}
         />
         <input
+          type="number"
+          min="0"
+          max="59"
           className="new-todo-form__timer"
           placeholder="Sec"
           value={newTodo.seconds}

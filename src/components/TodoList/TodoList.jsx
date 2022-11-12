@@ -13,10 +13,11 @@ function TodoList({ todoItems, onDeleted, onToggleDone, editTodo, changeTodoLabe
           isEditing={elem.editing}
           creationTime={elem.creationTime}
           key={elem.creationTime}
-          editTodo={() => editTodo(elem.creationTime)}
-          onToggleDone={() => onToggleDone(elem.creationTime)}
-          onDeleted={() => onDeleted(elem.creationTime)}
+          editTodo={editTodo}
+          onToggleDone={onToggleDone}
+          onDeleted={onDeleted}
           changeTodoLabel={changeTodoLabel}
+          startingTime={elem.startingTime}
         />
       ))}
     </ul>

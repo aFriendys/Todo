@@ -11,9 +11,10 @@ function TodoListItem({
   editTodo,
   creationTime,
   changeTodoLabel,
+  startingTime,
 }) {
   const classNames = [];
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(Number(startingTime));
   const [isCounting, setIsCounting] = useState(false);
   const [dateDistance, setDatedistance] = useState(`${formatDistanceToNow(new Date(Number(creationTime)))} ago`);
   const minutes = Math.floor(timeLeft / 60);
@@ -37,13 +38,18 @@ function TodoListItem({
   useEffect(() => {
     const interval = setInterval(() => {
       if (isCounting) {
-        setTimeLeft((timeleft) => timeleft + 1);
+        setTimeLeft((timeleft) => timeleft - 1);
+        if (timeLeft <= 0) {
+          setIsCounting(false);
+          setTimeLeft(startingTime);
+          onToggleDone(creationTime, true);
+        }
       }
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [isCounting]);
+  }, [isCounting, timeLeft]);
   const handleStart = () => {
     setIsCounting(true);
   };
@@ -56,10 +62,10 @@ function TodoListItem({
         <input
           className="toggle"
           type="checkbox"
-          onClick={onToggleDone}
+          onChange={() => onToggleDone(creationTime)}
           id={`todo-${creationTime}`}
           // eslint-disable-next-line react/no-unknown-property
-          defaultChecked={isCompleted}
+          checked={isCompleted}
         />
         <label htmlFor={`todo-${creationTime}`}>
           <span className="title">{label}</span>
@@ -73,8 +79,20 @@ function TodoListItem({
           </span>
           <span className="created">created in {dateDistance}</span>
         </label>
-        <button type="button" className="icon icon-edit" onClick={editTodo} />
-        <button type="button" className="icon icon-destroy" onClick={onDeleted} />
+        <button
+          type="button"
+          className="icon icon-edit"
+          onClick={() => {
+            editTodo(creationTime);
+          }}
+        />
+        <button
+          type="button"
+          className="icon icon-destroy"
+          onClick={() => {
+            onDeleted(creationTime);
+          }}
+        />
       </div>
       {isEditing && (
         <input

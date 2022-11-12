@@ -1,5 +1,3 @@
-/* eslint-disable react/no-this-in-sfc */
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -9,17 +7,18 @@ import Footer from './components/Footer';
 import './styles.css';
 
 function App() {
-  const createTodoItem = (label, creationTime, completed, editing) => ({
+  const createTodoItem = (label, creationTime, completed, editing, startingTime) => ({
     label,
     creationTime,
     completed,
     editing,
+    startingTime,
   });
 
   const [todoItems, setTodoItems] = useState([
-    createTodoItem('Task 1', '1661357995014', true, false),
-    createTodoItem('Task 2', '1661357995614', true, false),
-    createTodoItem('Task 3', '1661358014766', false, false),
+    createTodoItem('Task 1', '1661357995014', true, false, 10 * 60),
+    createTodoItem('Task 2', '1661357995614', true, false, 20 * 60),
+    createTodoItem('Task 3', '1661358014766', false, false, 30 * 60),
   ]);
 
   const [filter, setFilter] = useState('all');
@@ -39,18 +38,18 @@ function App() {
   const changeFilter = (e) => {
     setFilter(() => e.target.id.replace('filter_', ''));
   };
-  const addItem = (name) => {
-    setTodoItems(() => [...todoItems, createTodoItem(name, Number(new Date()), false, false)]);
+  const addItem = (name, startingTime) => {
+    setTodoItems(() => [...todoItems, createTodoItem(name, Number(new Date()), false, false, startingTime)]);
   };
   const deleteItem = (id) => {
     setTodoItems(() => todoItems.filter((elem) => elem.creationTime !== id));
   };
 
-  const toogleCompleted = (id) => {
+  const toogleCompleted = (id, value) => {
     setTodoItems((items) =>
       items.map((elem) => {
         const newElem = elem;
-        if (elem.creationTime === id) newElem.completed = !newElem.completed;
+        if (elem.creationTime === id) newElem.completed = value || !newElem.completed;
         return newElem;
       })
     );
