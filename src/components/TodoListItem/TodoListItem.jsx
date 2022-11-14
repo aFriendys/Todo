@@ -38,7 +38,7 @@ function TodoListItem({
   useEffect(() => {
     const interval = setInterval(() => {
       if (isCounting) {
-        setTimeLeft((timeleft) => timeleft - 1);
+        setTimeLeft((timeleft) => timeleft + 1);
         if (timeLeft <= 0) {
           setIsCounting(false);
           setTimeLeft(startingTime);
@@ -62,7 +62,10 @@ function TodoListItem({
         <input
           className="toggle"
           type="checkbox"
-          onChange={() => onToggleDone(creationTime)}
+          onChange={() => {
+            onToggleDone(creationTime);
+            handleStop();
+          }}
           id={`todo-${creationTime}`}
           // eslint-disable-next-line react/no-unknown-property
           checked={isCompleted}
