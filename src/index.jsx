@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import Header from './components/Header';
@@ -22,7 +22,20 @@ function App() {
   ]);
 
   const [filter, setFilter] = useState('all');
+  const [todoItemsToShow, setTodoItemsToShow] = useState([]);
 
+  useEffect(() => {
+    setTodoItemsToShow(() => {
+      switch (filter) {
+        case 'completed':
+          return todoItems.filter((elem) => elem.completed);
+        case 'active':
+          return todoItems.filter((elem) => !elem.completed);
+        default:
+          return todoItems;
+      }
+    });
+  }, [filter, todoItems]);
   const changeTodoLabel = (id, value) => {
     setTodoItems((items) =>
       items.map((elem) => {
@@ -73,24 +86,12 @@ function App() {
 
   const remainingItems = todoItems.filter((elem) => !elem.completed).length;
 
-  let todoItemsShown;
-  switch (filter) {
-    case 'completed':
-      todoItemsShown = todoItems.filter((elem) => elem.completed);
-      break;
-    case 'active':
-      todoItemsShown = todoItems.filter((elem) => !elem.completed);
-      break;
-    default:
-      todoItemsShown = todoItems;
-  }
-
   return (
     <section className="todoapp">
       <Header addItem={addItem} />
       <section className="main">
         <TodoList
-          todoItems={todoItemsShown}
+          todoItems={todoItemsToShow}
           onDeleted={deleteItem}
           onToggleDone={toogleCompleted}
           editTodo={editTask}
