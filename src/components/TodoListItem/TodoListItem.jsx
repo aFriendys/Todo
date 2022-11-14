@@ -38,7 +38,7 @@ function TodoListItem({
   useEffect(() => {
     const interval = setInterval(() => {
       if (isCounting) {
-        setTimeLeft((timeleft) => timeleft + 1);
+        setTimeLeft((timeleft) => timeleft - 1);
         if (timeLeft <= 0) {
           setIsCounting(false);
           setTimeLeft(startingTime);
@@ -76,7 +76,7 @@ function TodoListItem({
             {isCounting ? (
               <button type="button" className="icon icon-pause" onClick={handleStop} />
             ) : (
-              <button type="button" className="icon icon-play" onClick={handleStart} />
+              <button type="button" className="icon icon-play" onClick={handleStart} disabled={isCompleted} />
             )}
             {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
           </span>
