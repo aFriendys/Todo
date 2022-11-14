@@ -1,1 +1,1 @@
-[Ссылка на Vercel](https://todo-app-afriendys.vercel.app/ "todoApp на Vercel")
+[Ссылка на Vercel](https://todo-app-v2-swart.vercel.app/ "todoApp на Vercel")
