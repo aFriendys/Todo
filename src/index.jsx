@@ -61,7 +61,6 @@ function App() {
         const newElem = elem;
         if (elem.creationTime === id) {
           newElem.editing = true;
-          newElem.completed = false;
         }
         return newElem;
       })
